@@ -1,0 +1,58 @@
+# .NET Core
+bin/
+obj/
+out/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Visual Studio
+*.vs/
+*.dbmdl
+*.pdb
+*.cache
+*.log
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# IIS Express
+.vs/
+*.vspscc
+*.vssscc
+*.scc
+*.launchSettings.json
+
+# Rider
+.idea/
+*.sln.iml
+
+# DotCover
+*.dotCover
+
+# Others
+*.DS_Store
+*.env
+
+# Database
+script.sql

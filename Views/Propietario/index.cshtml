@@ -1,0 +1,69 @@
+@model List<inmobiliaria.Models.Propietario>
+
+@{
+    ViewData["Title"] = "Propietarios";
+}
+
+<h2 class="my-4">Lista de Propietarios</h2>
+
+
+
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Telefono</th>
+            <th>Direccion</th>
+            <th>Activo</th>
+            <th>Accion</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var propietario in Model)
+        {
+            <tr>
+                <td>@propietario.Nombre</td>
+                <td>@propietario.Apellido</td>
+                <td>@propietario.Telefono</td>
+                <td>@propietario.Direccion</td>
+                <td>
+                    <span class="badge @(propietario.Activo ? "bg-success" : "bg-danger")">
+                        @(propietario.Activo ? "Sí" : "No")
+                    </span>
+                </td>
+
+                <td>
+                    <a class="btn btn-sm btn-primary" asp-action="Editar" asp-route-id="@propietario.Id_Propietario">
+                        Actualizar
+                    </a>
+                    @if (propietario.Activo)
+                    {
+                        <a class="btn btn-sm btn-danger" asp-action="Eliminar" asp-route-id="@propietario.Id_Propietario"
+                            onclick="return confirm('¿Seguro que desea dar de baja este propietario?');">
+                            Dar de baja
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-sm btn-success" asp-action="Alta" asp-route-id="@propietario.Id_Propietario"
+                            onclick="return confirm('¿Seguro que desea dar de alta este propietario?');">
+                            Dar de alta
+                        </a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-success" id="mensajeTemp">@TempData["Mensaje"]</div>
+    <script>
+        setTimeout(function () {
+            var mensaje = document.getElementById('mensajeTemp');
+            if (mensaje) { mensaje.style.display = 'none'; }
+        }, 1500);
+    </script>
+}
