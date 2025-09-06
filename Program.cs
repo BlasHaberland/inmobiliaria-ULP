@@ -3,6 +3,22 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+
+builder.Services.AddAuthentication("authCookie")
+    .AddCookie("authCookie", options =>
+    {
+        options.LoginPath = "/Autenticacion/Login";
+        options.LogoutPath = "/Autenticacion/Logout";
+    });
+
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Administrador", policy => policy.RequireRole("administrador"));
+    options.AddPolicy("Empleado", policy => policy.RequireRole("empleado"));
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -15,14 +31,14 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+    pattern: "{controller=Home}/{action=Bienvenida}/{id?}")
     .WithStaticAssets();
 
 
