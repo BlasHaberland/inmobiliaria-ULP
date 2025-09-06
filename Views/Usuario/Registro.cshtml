@@ -1,0 +1,89 @@
+@model inmobiliaria.Models.Usuario
+
+@{
+    ViewData["Title"] = "Registro de Usuario";
+    ViewBag.OcultarNavbar = true;
+}
+<style>
+    .registro-main-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #181a1b;
+        color: #f1f1f1;
+        margin-top: 60px;
+    }
+
+    .registro-form {
+        background: #23272b;
+        padding: 2.5rem 2rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .registro-title {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 1.5rem;
+        color: #fff;
+        text-align: center;
+        font-family: 'Roboto', Arial, sans-serif;
+    }
+
+    .btn-registro {
+        width: 100%;
+        background: linear-gradient(90deg, #1e824c 0%, #26a65b 100%);
+        color: #fff;
+        border: none;
+        font-size: 1.1rem;
+        margin-top: 1rem;
+    }
+
+    .btn-registro:hover {
+        opacity: 0.85;
+    }
+</style>
+
+<div class="registro-main-container">
+    <form asp-action="Registro" method="post" class="registro-form">
+        <div class="registro-title">Registro de Usuario</div>
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Contrasena" class="form-label">Contraseña</label>
+            <input asp-for="Contrasena" class="form-control" type="password" />
+            <span asp-validation-for="Contrasena" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Nombre" class="form-label"></label>
+            <input asp-for="Nombre" class="form-control" />
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Apellido" class="form-label"></label>
+            <input asp-for="Apellido" class="form-control" />
+            <span asp-validation-for="Apellido" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Rol" class="form-label"></label>
+            <select asp-for="Rol" class="form-select">
+                <option value="empleado">Empleado</option>
+                <option value="administrador">Administrador</option>
+            </select>
+            <span asp-validation-for="Rol" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-registro">Registrarme</button>
+        <a asp-action="Bienvenida" asp-controller="Home" class="btn btn-secondary w-100 mt-2">Cancelar</a>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

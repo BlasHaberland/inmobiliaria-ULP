@@ -1,0 +1,76 @@
+@model inmobiliaria.Models.Usuario
+
+@{
+    ViewData["Title"] = "Iniciar sesión";
+    ViewBag.OcultarNavbar = true;
+}
+
+<style>
+    .login-main-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #181a1b;
+        color: #f1f1f1;
+    }
+
+    .login-form {
+        background: #23272b;
+        padding: 2.5rem 2rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .login-title {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 1.5rem;
+        color: #fff;
+        text-align: center;
+        font-family: 'Roboto', Arial, sans-serif;
+    }
+
+    .btn-login {
+        width: 100%;
+        background: linear-gradient(90deg, #283e51 0%, #485563 100%);
+        color: #fff;
+        border: none;
+        font-size: 1.1rem;
+        margin-top: 1rem;
+    }
+
+    .btn-login:hover {
+        opacity: 0.85;
+    }
+</style>
+
+<div class="login-main-container">
+    <form asp-action="Login" method="post" class="login-form">
+        <div class="login-title">Iniciar sesión</div>
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Contrasena" class="form-label">Contraseña</label>
+            <input asp-for="Contrasena" class="form-control" type="password" />
+            <span asp-validation-for="Contrasena" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-login">Ingresar</button>
+        <a asp-action="Bienvenida" asp-controller="Home" class="btn btn-secondary w-100 mt-2">Cancelar</a>
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger mt-3">@TempData["Error"]</div>
+        }
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
