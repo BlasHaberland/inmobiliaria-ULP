@@ -52,7 +52,18 @@ namespace inmobiliaria.DAO
             return null;
         }
 
-
+        public List<Usuario> ObtenerTodos()
+        {
+            var lista = new List<Usuario>();
+            using var conexion = Conexion.ObtenerConexion(_connectionString);
+            var cmd = new MySqlCommand("SELECT * FROM usuarios", conexion);
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                lista.Add(MapearUsuario(reader));
+            }
+            return lista;
+        }
 
 
 

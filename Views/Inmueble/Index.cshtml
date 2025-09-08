@@ -1,0 +1,38 @@
+@model List<inmobiliaria.Models.Inmueble>
+
+@{
+    ViewData["Title"] = "Listado de Inmuebles";
+}
+
+<h2 class="my-4">Lista de Inmuebles</h2>
+
+
+<table class="table table-dark table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Dirección</th>
+            <th>Tipo</th>
+            <th>Ambientes</th>
+            <th>Precio</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var inmueble in Model)
+        {
+            <tr>
+                <td>@inmueble.Id_Inmueble</td>
+                <td>@inmueble.Direccion</td>
+                <td>@inmueble.Id_Tipo</td>
+                <td>@inmueble.Cantidad_Ambientes</td>
+                <td>@inmueble.Precio</td>
+                <td>@inmueble.Estado</td>
+                <td>
+                    <!-- acciones -->
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

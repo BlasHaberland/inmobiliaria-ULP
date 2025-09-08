@@ -64,6 +64,8 @@
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
+
+                            <!-- Propietario Dropdown -->
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="propietariosDropdown" role="button"
                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -80,6 +82,8 @@
                                     </li>
                                 </ul>
                             </li>
+
+                            <!-- Inquilinos Dropdown -->
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="inquilinosDropdown" role="button"
                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -96,6 +100,24 @@
                                     </li>
                                 </ul>
                             </li>
+
+                            <!-- Inmuebles Dropdown -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="inmueblesDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Inmuebles
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="inmueblesDropdown">
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Inmueble"
+                                            asp-action="Index">Lista</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Inmueble"
+                                            asp-action="Crear">Crear</a>
+                                    </li>
+                                </ul>
+
                         </ul>
                     </div>
                 </div>
