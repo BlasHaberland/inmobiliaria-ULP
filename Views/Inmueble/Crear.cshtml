@@ -1,0 +1,83 @@
+@model inmobiliaria.Models.Inmueble
+
+@{
+    ViewData["Title"] = "Nuevo Inmueble";
+}
+
+<h2>Nuevo Inmueble</h2>
+
+<form asp-action="Crear" method="post">
+    @Html.AntiForgeryToken()
+    <div class="mb-3">
+        <label asp-for="Direccion" class="form-label"></label>
+        <input asp-for="Direccion" class="form-control" />
+        <span asp-validation-for="Direccion" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Id_Propietario" class="form-label">Propietario</label>
+        <select asp-for="Id_Propietario" class="form-select">
+            <option value="">Seleccione un propietario</option>
+            @foreach (var propietario in ViewBag.Propietarios)
+            {
+                <option value="@propietario.Id_Propietario">
+                    @propietario.Nombre @propietario.Apellido
+                </option>
+            }
+        </select>
+        <span asp-validation-for="Id_Propietario" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Id_Tipo" class="form-label">Tipo</label>
+        <select asp-for="Id_Tipo" class="form-select">
+            <option value="">Seleccione un tipo</option>
+            @foreach (var tipo in ViewBag.Tipos)
+            {
+                <option value="@tipo.Id_Tipo">@tipo.Nombre</option>
+            }
+        </select>
+        <span asp-validation-for="Id_Tipo" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Uso" class="form-label"></label>
+        <select asp-for="Uso" class="form-select">
+            <option value="residencial">Residencial</option>
+            <option value="comercial">Comercial</option>
+        </select>
+        <span asp-validation-for="Uso" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Cantidad_Ambientes" class="form-label">Cantidad de ambientes</label>
+        <input asp-for="Cantidad_Ambientes" class="form-control" />
+        <span asp-validation-for="Cantidad_Ambientes" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Coordenadas" class="form-label"></label>
+        <input asp-for="Coordenadas" class="form-control" />
+        <span asp-validation-for="Coordenadas" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Precio" class="form-label"></label>
+        <input asp-for="Precio" class="form-control" />
+        <span asp-validation-for="Precio" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Estado" class="form-label"></label>
+        <select asp-for="Estado" class="form-select">
+            <option value="disponible">Disponible</option>
+            <option value="suspendido">Suspendido</option>
+            <option value="ocupado">Ocupado</option>
+        </select>
+        <span asp-validation-for="Estado" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,5 +1,6 @@
 using inmobiliaria.DAO;
 using inmobiliaria.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace inmobiliaria.Controllers
@@ -14,12 +15,16 @@ namespace inmobiliaria.Controllers
             _usuarioDao = new UsuarioDAO(connectionString);
         }
 
+
+        [Authorize(Policy = "Administrador")]
         public IActionResult Registro()
         {
             return View();
         }
 
         [HttpPost]
+
+        [Authorize(Policy = "Administrador")]
         public IActionResult Registro(Usuario usuario)
         {
             if (ModelState.IsValid)

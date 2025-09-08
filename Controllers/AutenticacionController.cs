@@ -19,6 +19,7 @@ namespace inmobiliaria.Controllers
 
         public IActionResult Login()
         {
+            ViewBag.Usuarios = _usuarioDAO.ObtenerTodos();
             return View();
         }
 
