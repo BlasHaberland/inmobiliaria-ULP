@@ -1,0 +1,43 @@
+@model IEnumerable<inmobiliaria.Models.Usuario>
+
+@{
+    ViewData["Title"] = "Usuarios";
+}
+
+<h2>Usuarios</h2>
+<a asp-action="Registro" class="btn btn-success mb-3">Crear Usuario</a>
+<table class="table table-dark table-striped">
+    <thead>
+        <tr>
+            <th>Imagen</th>
+            <th>Email</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Rol</th>
+            <th>Activo</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var usuario in Model)
+        {
+            <tr>
+                <td>
+                    @if (!string.IsNullOrEmpty(usuario.Avatar))
+                    {
+                        <img src="~/avatars/@(usuario.Avatar.StartsWith("/") ? usuario.Avatar.Substring(1) : usuario.Avatar)"
+                            alt="Perfil" width="48" height="48" class="rounded-circle" />
+                    }
+                    else
+                    {
+                        <img src="~/avatars/avatarDefault.jpg" alt="Perfil" width="48" height="48" class="rounded-circle" />
+                    }
+                </td>
+                <td>@usuario.Email</td>
+                <td>@usuario.Nombre</td>
+                <td>@usuario.Apellido</td>
+                <td>@usuario.Rol</td>
+                <td>@(usuario.Activo ? "Sí" : "No")</td>
+            </tr>
+        }
+    </tbody>
+</table>

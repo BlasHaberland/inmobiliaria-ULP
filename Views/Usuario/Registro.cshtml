@@ -47,7 +47,7 @@
 </style>
 
 <div class="registro-main-container">
-    <form asp-action="Registro" method="post" class="registro-form">
+    <form asp-action="Registro" method="post" enctype="multipart/form-data" class="registro-form">
         <div class="registro-title">Registro de Usuario</div>
         <div class="mb-3">
             <label asp-for="Email" class="form-label"></label>
@@ -77,8 +77,12 @@
             </select>
             <span asp-validation-for="Rol" class="text-danger"></span>
         </div>
-        <button type="submit" class="btn btn-registro">Registrarme</button>
-        <a asp-action="Bienvenida" asp-controller="Home" class="btn btn-secondary w-100 mt-2">Cancelar</a>
+        <div class="mb-3">
+            <label class="form-label">Imagen de perfil</label>
+            <input type="file" name="AvatarFile" class="form-control" accept="image/*" />
+        </div>
+        <button type="submit" class="btn btn-registro">Registrar</button>
+        <a asp-action="Index" asp-controller="Home" class="btn btn-secondary w-100 mt-2">Cancelar</a>
     </form>
 </div>
 
