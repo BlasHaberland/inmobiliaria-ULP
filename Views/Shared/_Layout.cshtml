@@ -117,8 +117,35 @@
                                             asp-action="Crear">Crear</a>
                                     </li>
                                 </ul>
+                            </li>
+                            <!-- Usuario Dropdown -->
+                            @if (User.IsInRole("administrador"))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="usuariosDropdown" role="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        Usuarios
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="usuariosDropdown">
+                                        <li>
+                                            <a class="dropdown-item" asp-area="" asp-controller="Usuario"
+                                                asp-action="Index">Lista</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-area="" asp-controller="Usuario"
+                                                asp-action="Registro">Crear</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
 
                         </ul>
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <form asp-controller="Autenticacion" asp-action="Logout" method="post" class="d-flex ms-auto">
+                                <button type="submit" class="btn btn-danger">Salir</button>
+                            </form>
+                        }
                     </div>
                 </div>
             </nav>

@@ -46,5 +46,13 @@ namespace inmobiliaria.Controllers
             ViewBag.Mensaje = "Login inválido";
             return View();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync("authCookie");
+            return RedirectToAction("Login", "Autenticacion");
+        }
+
     }
 }
