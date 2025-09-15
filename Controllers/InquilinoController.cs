@@ -1,9 +1,11 @@
 using inmobiliaria.DAO;
 using inmobiliaria.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace inmobiliaria.Controllers
 {
+    [Authorize]
     public class InquilinoController : Controller
     {
         private readonly InquilinoDAO _inquilinoDao;

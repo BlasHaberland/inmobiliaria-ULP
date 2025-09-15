@@ -5,54 +5,6 @@
     ViewBag.OcultarNavbar = true;
 }
 
-<style>
-    .login-main-container {
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #181a1b;
-        color: #f1f1f1;
-    }
-
-    .login-form {
-        background: #23272b;
-        padding: 2.5rem 2rem;
-        border-radius: 16px;
-        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
-        width: 100%;
-        max-width: 400px;
-    }
-
-    .login-content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-    }
-
-    .login-title {
-        font-size: 2rem;
-        font-weight: bold;
-        margin-bottom: 1.5rem;
-        color: #fff;
-        text-align: center;
-        font-family: 'Roboto', Arial, sans-serif;
-    }
-
-    .btn-login {
-        width: 100%;
-        background: linear-gradient(90deg, #283e51 0%, #485563 100%);
-        color: #fff;
-        border: none;
-        font-size: 1.1rem;
-        margin-top: 1rem;
-    }
-
-    .btn-login:hover {
-        opacity: 0.85;
-    }
-</style>
 
 <div class="login-main-container">
     <div class="login-content">
@@ -97,6 +49,12 @@
                 </tbody>
             </table>
         }
+        @if (ViewBag.Mensaje != null)
+        {
+            <div class="login-error-message">
+                @ViewBag.Mensaje
+            </div>
+        }
     </div>
 </div>
 
@@ -104,4 +62,8 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/LoginStyle.css" />
 }
