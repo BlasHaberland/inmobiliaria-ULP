@@ -11,6 +11,8 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/inmobiliaria.styles.css" asp-append-version="true" />
+    @RenderSection("Styles", required: false)
+
     <style>
         body {
             background-color: #181a1b;
@@ -157,7 +159,7 @@
         </main>
     </div>
 
-    <footer class="footer mt-5 py-3" style="background-color: #181a1b; color: #ffffff; border-top: 1px solid #23272b;">
+    <footer class="footer py-3" style="background-color: #181a1b; color: #ffffff; border-top: 1px solid #23272b;">
         <div class="container text-center">
             Inmobiliaria - Desarrollado por Blas - .NET
         </div>

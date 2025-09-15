@@ -1,0 +1,43 @@
+
+    .bienvenida-container {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #181a1b;
+        color: #f1f1f1;
+    }
+
+    .bienvenida-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+
+        margin-bottom: 2rem;
+        color: #fff;
+    }
+
+    .bienvenida-btn {
+        min-width: 180px;
+        font-size: 1.2rem;
+        margin: 0.7rem 0;
+        border: none;
+        display: block;
+    }
+
+    .bienvenida-btn-success {
+        background: linear-gradient(90deg, #1e824c 0%, #26a65b 100%);
+        color: #fff;
+        font-family: 'Roboto', Arial, sans-serif;
+    }
+
+    .bienvenida-btn-primary {
+        background: linear-gradient(90deg, #283e51 0%, #485563 100%);
+        color: #fff;
+        font-family: 'Roboto', Arial, sans-serif;
+    }
+
+    .bienvenida-btn-success:hover,
+    .bienvenida-btn-primary:hover {
+        opacity: 0.85;
+    }

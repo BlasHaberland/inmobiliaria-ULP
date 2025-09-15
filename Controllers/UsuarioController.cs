@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace inmobiliaria.Controllers
 {
+    [Authorize]
     public class UsuarioController : Controller
     {
         private readonly UsuarioDAO _usuarioDao;

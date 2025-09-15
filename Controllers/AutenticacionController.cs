@@ -44,6 +44,7 @@ namespace inmobiliaria.Controllers
                 return RedirectToAction("Index", "Home");
             }
             ViewBag.Mensaje = "Login inválido";
+            ViewBag.Usuarios = _usuarioDAO.ObtenerTodos();
             return View();
         }
 
