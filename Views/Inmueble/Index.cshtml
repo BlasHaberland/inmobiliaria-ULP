@@ -16,6 +16,7 @@
             <th>Ambientes</th>
             <th>Precio</th>
             <th>Estado</th>
+            <th>Activo</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -30,7 +31,25 @@
                 <td>@inmueble.Precio</td>
                 <td>@inmueble.Estado</td>
                 <td>
-                    <!-- acciones -->
+                    <span class="badge @(inmueble.Activo ? "bg-success" : "bg-danger")">
+                        @(inmueble.Activo ? "Sí" : "No")
+                    </span>
+                </td>
+                <td>
+                    @if (inmueble.Activo)
+                    {
+                        <a class="btn btn-sm btn-danger" asp-action="Eliminar" asp-route-id="@inmueble.Id_Inmueble"
+                            onclick="return confirm('¿Seguro que desea dar de baja este inmueble?');">
+                            Dar de baja
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-sm btn-success" asp-action="Alta" asp-route-id="@inmueble.Id_Inmueble"
+                            onclick="return confirm('¿Seguro que desea dar de alta este inmueble?');">
+                            Dar de alta
+                        </a>
+                    }
                 </td>
             </tr>
         }

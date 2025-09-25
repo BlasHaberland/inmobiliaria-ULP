@@ -141,6 +141,28 @@
                                 </li>
                             }
 
+                            <!-- Contrato Dropdown -->
+                            @if (User.IsInRole("administrador"))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="contratosDropdown" role="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        Contratos
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="contratosDropdown">
+                                        <li>
+                                            <a class="dropdown-item" asp-area="" asp-controller="Contrato"
+                                                asp-action="Index">Lista</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-area="" asp-controller="Contrato"
+                                                asp-action="Crear">Nuevo Contrato</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+
+
                         </ul>
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {

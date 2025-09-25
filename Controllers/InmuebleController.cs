@@ -26,6 +26,14 @@ namespace inmobiliaria.Controllers
             return View(inmuebles);
         }
 
+        [HttpGet]
+        public IActionResult InmueblePropietario(int id)
+        {
+            var inmuebles = _inmuebleDao.ObtenerPorIdPropietario(id);
+            ViewBag.IdPropietario = id;
+            return View("Index", inmuebles);
+        }
+
         [Authorize(Policy = "Administrador")]
         public IActionResult Crear()
 
@@ -56,6 +64,33 @@ namespace inmobiliaria.Controllers
             return View(inmueble);
         }
 
+        public IActionResult Eliminar(int id)
+        {
+            bool exito = _inmuebleDao.Eliminar(id);
+            if (exito)
+            {
+                TempData["Mensaje"] = "Inmueble eliminado correctamente.";
+            }
+            else
+            {
+                TempData["Error"] = "No se pudo eliminar el inmueble.";
+            }
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Alta(int id)
+        {
+            bool exito = _inmuebleDao.Alta(id);
+            if (exito)
+            {
+                TempData["Mensaje"] = "Inmueble dado de alta correctamente.";
+            }
+            else
+            {
+                TempData["Error"] = "No se pudo dar de alta el inmueble.";
+            }
+            return RedirectToAction("Index");
+        }
 
     }
 }
