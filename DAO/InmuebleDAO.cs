@@ -35,7 +35,18 @@ namespace inmobiliaria.DAO
             return lista;
         }
 
-
+        public List<Inmueble> ObtenerDisponibles()
+        {
+            var lista = new List<Inmueble>();
+            using var conexion = Data.Conexion.ObtenerConexion(_connectionString);
+            var cmd = new MySqlCommand("SELECT * FROM inmuebles WHERE activo = 1 AND estado = 'disponible'", conexion);
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                lista.Add(MapearInmueble(reader));
+            }
+            return lista;
+        }
         public Inmueble? ObtenerPorId(int id)
         {
             using var conexion = Data.Conexion.ObtenerConexion(_connectionString);
@@ -100,6 +111,15 @@ namespace inmobiliaria.DAO
             return cmd.ExecuteNonQuery() > 0;
         }
 
+        public bool CambiarEstado(int idInmueble, string nuevoEstado)
+        {
+            using var conexion = Data.Conexion.ObtenerConexion(_connectionString);
+            var cmd = new MySqlCommand("UPDATE inmuebles SET estado = @estado WHERE id_inmueble = @id", conexion);
+            cmd.Parameters.AddWithValue("@estado", nuevoEstado);
+            cmd.Parameters.AddWithValue("@id", idInmueble);
+
+            return cmd.ExecuteNonQuery() > 0;
+        }
         public bool Eliminar(int id)
         {
             using var conexion = Data.Conexion.ObtenerConexion(_connectionString);
