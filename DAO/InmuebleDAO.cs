@@ -121,7 +121,7 @@ namespace inmobiliaria.DAO
         public bool Eliminar(int id)
         {
             using var conexion = Data.Conexion.ObtenerConexion(_connectionString);
-            var cmd = new MySqlCommand("UPDATE inmuebles SET activo = 0 WHERE id_inmueble = @id", conexion);
+            var cmd = new MySqlCommand("UPDATE inmuebles SET activo = 0, estado = 'suspendido' WHERE id_inmueble = @id", conexion);
             cmd.Parameters.AddWithValue("@id", id);
 
             return cmd.ExecuteNonQuery() > 0;
@@ -130,7 +130,7 @@ namespace inmobiliaria.DAO
         public bool Alta(int id)
         {
             using var conexion = Data.Conexion.ObtenerConexion(_connectionString);
-            var cmd = new MySqlCommand("UPDATE inmuebles SET activo = 1 WHERE id_inmueble = @id", conexion);
+            var cmd = new MySqlCommand("UPDATE inmuebles SET activo = 1, estado = 'disponible' WHERE id_inmueble = @id", conexion);
             cmd.Parameters.AddWithValue("@id", id);
 
             return cmd.ExecuteNonQuery() > 0;
