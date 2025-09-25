@@ -96,7 +96,7 @@ namespace inmobiliaria.DAO
         public bool Actualizar(Inmueble inmueble)
         {
             using var conexion = Data.Conexion.ObtenerConexion(_connectionString);
-            var cmd = new MySqlCommand("UPDATE inmuebles SET id_propietario = @id_propietario, id_tipo = @id_tipo, uso = @uso, direccion = @direccion, cantidad_ambientes = @cantidad_ambientes, coordenadas = @coordenadas, precio = @precio, estado = @estado, activo = @activo WHERE id_inmueble = @id", conexion);
+            var cmd = new MySqlCommand("UPDATE inmuebles SET id_propietario = @id_propietario, id_tipo = @id_tipo, uso = @uso, direccion = @direccion, cantidad_ambientes = @cantidad_ambientes, coordenadas = @coordenadas, precio = @precio, estado = @estado WHERE id_inmueble = @id", conexion);
             cmd.Parameters.AddWithValue("@id", inmueble.Id_Inmueble);
             cmd.Parameters.AddWithValue("@id_propietario", inmueble.Id_Propietario);
             cmd.Parameters.AddWithValue("@id_tipo", inmueble.Id_Tipo);
@@ -106,8 +106,6 @@ namespace inmobiliaria.DAO
             cmd.Parameters.AddWithValue("@coordenadas", inmueble.Coordenadas ?? (object)DBNull.Value);
             cmd.Parameters.AddWithValue("@precio", inmueble.Precio);
             cmd.Parameters.AddWithValue("@estado", inmueble.Estado);
-            cmd.Parameters.AddWithValue("@activo", inmueble.Activo);
-
             return cmd.ExecuteNonQuery() > 0;
         }
 
