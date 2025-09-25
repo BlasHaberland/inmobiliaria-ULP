@@ -6,14 +6,83 @@
     var tipos = ViewBag.TiposInmueble as List<inmobiliaria.Models.TipoInmueble>;
 }
 
+<style>
+    body, .container, .card {
+        background-color: #181a1b !important;
+        color: #f1f1f1 !important;
+    }
+    .card {
+        border: 1px solid #22C55E;
+    }
+    .card-header.bg-primary, .text-info {
+        background-color: #22C55E !important;
+        color: #fff !important;
+    }
+    .form-control, .form-select {
+        background-color: #23272b !important;
+        color: #f1f1f1 !important;
+        border: 1px solid #444;
+    }
+    .form-control:focus, .form-select:focus {
+        background-color: #23272b !important;
+        color: #fff !important;
+        border-color: #3399ff;
+        box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    }
+    .input-group-text {
+        background-color: #23272b !important;
+        color: #f1f1f1 !important;
+        border: 1px solid #444;
+    }
+    .btn-success {
+        background-color: #198754 !important;
+        border-color: #198754 !important;
+    }
+    .btn-secondary {
+        background-color: #6c757d !important;
+        border-color: #6c757d !important;
+    }
+    .btn-success:hover, .btn-secondary:hover {
+        filter: brightness(1.1);
+    }
+    .text-danger {
+        color: #ff6b6b !important;
+    }
+    label {
+        color: #f1f1f1 !important;
+    }
+    .card-title {
+        color: #22C55E !important;
+        font-weight: bold;
+    }
+    .bg-light {
+        background-color: #23272b !important;
+    }
+    .form-check-label {
+        color: #f1f1f1 !important;
+    }
+    .form-check-input:checked {
+        background-color: #22C55E !important;
+        border-color: #22C55E !important;
+    }
+
+    .form-control::placeholder,
+    .form-select::placeholder,
+    input::placeholder,
+    select::placeholder {
+        color: #d9dad9 !important;
+    }
+</style>
 
 <div class="container py-5">
     <div class="row justify-content-center">
         <!-- Panel de búsqueda de inquilinos -->
         <div class="col-lg-4 col-md-6 mb-3">
             <div class="card shadow h-40">
+            <div class="card-header bg-primary text-white text-center">
+                <h5 class="mb-0 text-white">Buscar y Seleccionar Inquilino</h5>
+            </div>
                 <div class="card-body">
-                    <h5 class="card-title text-center text-info mb-3">Buscar y Seleccionar Inquilino</h5>
                     <input type="text" id="buscadorInquilino" class="form-control mb-3" placeholder="Buscar inquilino..." autocomplete="off" />
                     <div id="panelInquilinos" class="border rounded p-2 bg-light" style="max-height:250px; overflow-y:auto;">
                         @foreach (var inq in inquilinos)
@@ -39,8 +108,10 @@
         <!-- Panel de búsqueda de inmuebles -->
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="card shadow h-70">
+            <div class="card-header bg-primary text-white text-center">
+                <h5 class="mb-0 text-white">Buscar y Seleccionar Inmueble</h5>
+            </div>
                 <div class="card-body">
-                    <h5 class="card-title text-center text-info mb-3">Buscar y Seleccionar Inmueble</h5>
                     <div class="mb-2">
                         <select id="filtroTipo" class="form-select mb-2">
                             <option value="">Tipo (todos)</option>
@@ -83,11 +154,13 @@
         <!-- Formulario principal -->
         <div class="col-lg-4 col-md-12 mb-4">
             <div class="card shadow h-100">
+            <div class="card-header bg-primary text-white text-center">
+                <h5 class="mb-0 text-white">Contrato Final</h5>
+            </div>
                 <div class="card-body">
-                    <h2 class="mb-4 text-center text-info">Crear Nuevo Contrato</h2>
                     <form asp-action="Crear" method="post" id="formContrato">
                         <div class="mb-3">
-                            <label for="Id_Inmueble" class="form-label">Inmueble</label>
+                            <label for="Id_Inmueble" class="form-label">Inmueble*</label>
                             <input asp-for="Id_Inmueble" class="form-control" type="number" min="1" readonly required id="IdInmuebleInput" />
                         </div>
                         <div class="mb-3">
@@ -103,11 +176,11 @@
                             <input asp-for="Monto_Mensual" class="form-control" type="number" min="0" step="0.01" required id="MontoMensualInput" />
                         </div>
                         <div class="mb-3">
-                            <label for="Multa" class="form-label">Multa</label>
+                            <label for="Multa" class="form-label">Multa*</label>
                             <input asp-for="Multa" class="form-control" type="number" readonly min="0" step="0.01" value="0" />
                         </div>
                         <div class="mb-3">
-                            <label for="Estado" class="form-label">Estado</label>
+                            <label for="Estado" class="form-label">Estado*</label>
                             <input asp-for="Estado" class="form-control" value="vigente" readonly />
                         </div>
                         <div class="text-center">
@@ -115,6 +188,7 @@
                             <a asp-action="Index" class="btn btn-secondary ms-2">Cancelar</a>
                         </div>
                     </form>
+                    <p class="text-white mt-3">(*) Campos que no se pueden modificar</p>
                 </div>
             </div>
         </div>
@@ -123,7 +197,7 @@
 
 <script>
     // Filtrado de inquilinos
-        document.getElementById('buscadorInquilino').addEventListener('input', function () {
+    document.getElementById('buscadorInquilino').addEventListener('input', function () {
         var texto = this.value.trim().toLowerCase();
         var items = document.querySelectorAll('.inquilino-item');
         items.forEach(function (item) {
@@ -152,15 +226,13 @@
 
     // Autocompletar campos al seleccionar un inmueble
     document.querySelectorAll('input[name="Id_Inmueble"]').forEach(function (radio) {
-    radio.addEventListener('change', function () {
-        // ID del inmueble seleccionado
-        var id = this.value;
-        // Precio del inmueble seleccionado
-        var precio = this.getAttribute('data-precio');
-        document.getElementById('IdInmuebleInput').value = id;
-        document.getElementById('MontoMensualInput').value = precio.replace(',', '.');
+        radio.addEventListener('change', function () {
+            var id = this.value;
+            var precio = this.getAttribute('data-precio');
+            document.getElementById('IdInmuebleInput').value = id;
+            document.getElementById('MontoMensualInput').value = precio.replace(',', '.');
+        });
     });
-});
     document.getElementById('filtroTipo').addEventListener('change', filtrarInmuebles);
     document.getElementById('filtroAmbientes').addEventListener('input', filtrarInmuebles);
     document.getElementById('filtroPrecio').addEventListener('input', filtrarInmuebles);
