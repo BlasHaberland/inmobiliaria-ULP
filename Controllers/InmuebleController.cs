@@ -38,7 +38,7 @@ namespace inmobiliaria.Controllers
         public IActionResult Crear()
 
         {
-            var propietarios = _propietarioDao.obtenerTodos();
+            var propietarios = _propietarioDao.obtenerActivos();
             var tipos = _tipoInmuebleDao.ObtenerTodos();
             ViewBag.Tipos = tipos;
             ViewBag.Propietarios = propietarios;
@@ -47,7 +47,6 @@ namespace inmobiliaria.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Authorize(Policy = "Administrador")]
         public IActionResult Crear(Inmueble inmueble)
         {
@@ -57,10 +56,43 @@ namespace inmobiliaria.Controllers
                 return RedirectToAction("Index");
             }
 
-            var propietarios = _propietarioDao.obtenerTodos();
+            var propietarios = _propietarioDao.obtenerActivos();
             var tipos = _tipoInmuebleDao.ObtenerTodos();
             ViewBag.Tipos = tipos;
             ViewBag.Propietarios = propietarios;
+            return View(inmueble);
+        }
+
+
+
+
+        public IActionResult Editar(int id)
+        {
+            var inmueble = _inmuebleDao.ObtenerPorId(id);
+            var propietarios = _propietarioDao.obtenerActivos();
+            var tipos = _tipoInmuebleDao.ObtenerTodos();
+            ViewBag.Tipos = tipos;
+            ViewBag.Propietarios = propietarios;
+            return View(inmueble);
+        }
+
+
+        [HttpPost]
+        public IActionResult Editar(Inmueble inmueble)
+        {
+            bool exito = _inmuebleDao.Actualizar(inmueble);
+            if (exito)
+            {
+                TempData["Mensaje"] = "Inmueble actualizado correctamente.";
+                return RedirectToAction("Index");
+            }
+
+            var propietarios = _propietarioDao.obtenerActivos();
+            var tipos = _tipoInmuebleDao.ObtenerTodos();
+            ViewBag.Tipos = tipos;
+            ViewBag.Propietarios = propietarios;
+
+            TempData["Error"] = "No se pudo actualizar el inmueble.";
             return View(inmueble);
         }
 

@@ -23,6 +23,19 @@ namespace inmobiliaria.DAO
             return lista;
         }
 
+        public List<Propietario> obtenerActivos()
+        {
+            var lista = new List<Propietario>();
+            using var conexion = Conexion.ObtenerConexion(_connectionString);
+            var cmd = new MySqlCommand("SELECT * FROM propietarios WHERE activo = 1", conexion);
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                lista.Add(MapearPropietario(reader));
+            }
+            return lista;
+        }
+
         public Propietario? obtenerPorId(int id)
         {
             using var conexion = Conexion.ObtenerConexion(_connectionString);

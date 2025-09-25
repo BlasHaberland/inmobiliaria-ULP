@@ -4,80 +4,106 @@
     ViewData["Title"] = "Nuevo Inmueble";
 }
 
-<h2>Nuevo Inmueble</h2>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Nuevo Inmueble</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Crear" method="post" autocomplete="off">
+                        @Html.AntiForgeryToken()
 
-<form asp-action="Crear" method="post">
-    @Html.AntiForgeryToken()
-    <div class="mb-3">
-        <label asp-for="Direccion" class="form-label"></label>
-        <input asp-for="Direccion" class="form-control" />
-        <span asp-validation-for="Direccion" class="text-danger"></span>
-    </div>
+                        <div class="mb-3">
+                            <label asp-for="Direccion" class="form-label"></label>
+                            <input asp-for="Direccion" class="form-control" placeholder="Ej: Av. Siempre Viva 123" />
+                            <span asp-validation-for="Direccion" class="text-danger small"></span>
+                        </div>
 
-    <div class="mb-3">
-        <label asp-for="Id_Propietario" class="form-label">Propietario</label>
-        <select asp-for="Id_Propietario" class="form-select">
-            <option value="">Seleccione un propietario</option>
-            @foreach (var propietario in ViewBag.Propietarios)
-            {
-                <option value="@propietario.Id_Propietario">
-                    @propietario.Nombre @propietario.Apellido
-                </option>
-            }
-        </select>
-        <span asp-validation-for="Id_Propietario" class="text-danger"></span>
-    </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="Id_Propietario" class="form-label">Propietario</label>
+                                <select asp-for="Id_Propietario" class="form-select">
+                                    <option value="">Seleccione un propietario</option>
+                                    @foreach (var propietario in ViewBag.Propietarios)
+                                    {
+                                        <option value="@propietario.Id_Propietario">
+                                            @propietario.Nombre @propietario.Apellido
+                                        </option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Id_Propietario" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="Id_Tipo" class="form-label">Tipo</label>
+                                <select asp-for="Id_Tipo" class="form-select">
+                                    <option value="">Seleccione un tipo</option>
+                                    @foreach (var tipo in ViewBag.Tipos)
+                                    {
+                                        <option value="@tipo.Id_Tipo">@tipo.Nombre</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Id_Tipo" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="Uso" class="form-label"></label>
+                                <select asp-for="Uso" class="form-select">
+                                    <option value="residencial">Residencial</option>
+                                    <option value="comercial">Comercial</option>
+                                </select>
+                                <span asp-validation-for="Uso" class="text-danger small"></span>
+                            </div>
+                        </div>
 
-    <div class="mb-3">
-        <label asp-for="Id_Tipo" class="form-label">Tipo</label>
-        <select asp-for="Id_Tipo" class="form-select">
-            <option value="">Seleccione un tipo</option>
-            @foreach (var tipo in ViewBag.Tipos)
-            {
-                <option value="@tipo.Id_Tipo">@tipo.Nombre</option>
-            }
-        </select>
-        <span asp-validation-for="Id_Tipo" class="text-danger"></span>
-    </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="Cantidad_Ambientes" class="form-label">Cantidad de ambientes</label>
+                                <input asp-for="Cantidad_Ambientes" class="form-control" type="number" min="1" />
+                                <span asp-validation-for="Cantidad_Ambientes" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="Coordenadas" class="form-label"></label>
+                                <input asp-for="Coordenadas" class="form-control" />
+                                <span asp-validation-for="Coordenadas" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="Precio" class="form-label"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input asp-for="Precio" class="form-control" type="number" min="0" step="0.01" />
+                                </div>
+                                <span asp-validation-for="Precio" class="text-danger small"></span>
+                            </div>
+                        </div>
 
-    <div class="mb-3">
-        <label asp-for="Uso" class="form-label"></label>
-        <select asp-for="Uso" class="form-select">
-            <option value="residencial">Residencial</option>
-            <option value="comercial">Comercial</option>
-        </select>
-        <span asp-validation-for="Uso" class="text-danger"></span>
+                        <div class="mb-3">
+                            <label asp-for="Estado" class="form-label"></label>
+                            <select asp-for="Estado" class="form-select">
+                                <option value="disponible">Disponible</option>
+                                <option value="suspendido">Suspendido</option>
+                                <option value="ocupado">Ocupado</option>
+                            </select>
+                            <span asp-validation-for="Estado" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+                            <button type="submit" class="btn btn-success">Guardar</button>
+                            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="mb-3">
-        <label asp-for="Cantidad_Ambientes" class="form-label">Cantidad de ambientes</label>
-        <input asp-for="Cantidad_Ambientes" class="form-control" />
-        <span asp-validation-for="Cantidad_Ambientes" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="Coordenadas" class="form-label"></label>
-        <input asp-for="Coordenadas" class="form-control" />
-        <span asp-validation-for="Coordenadas" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="Precio" class="form-label"></label>
-        <input asp-for="Precio" class="form-control" />
-        <span asp-validation-for="Precio" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="Estado" class="form-label"></label>
-        <select asp-for="Estado" class="form-select">
-            <option value="disponible">Disponible</option>
-            <option value="suspendido">Suspendido</option>
-            <option value="ocupado">Ocupado</option>
-        </select>
-        <span asp-validation-for="Estado" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Guardar</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-</form>
+</div>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/InmuebleEditar.css" />
 }
