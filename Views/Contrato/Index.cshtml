@@ -1,0 +1,40 @@
+@model List<inmobiliaria.Models.Contrato>
+
+@{
+    ViewData["Title"] = "Listado de Contratos";
+}
+
+<h2 class="my-4">Lista de Contratos</h2>
+
+<table class="table table-dark table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Inquilino</th>
+            <th>Inmueble</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th>Monto Mensual</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var contrato in Model)
+        {
+            <tr>
+                <td>@contrato.Id_Contrato</td>
+                <td>@($"{contrato.Nombre_Inquilino} {contrato.Apellido_Inquilino}")</td>
+                <td>@contrato.Id_Inmueble</td>
+                <td>@contrato.Fecha_Inicio.ToString("dd/MM/yyyy")</td>
+                <td>@contrato.Fecha_Fin_Original.ToString("dd/MM/yyyy")</td>
+                <td>$@contrato.Monto_Mensual</td>
+                <td>@contrato.Estado</td>
+                <td>
+                    <a asp-controller="Contrato" asp-action="Detalle" asp-route-id="@contrato.Id_Contrato"
+                        class="btn btn-info btn-sm">Ver Detalle</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,167 @@
+@model inmobiliaria.Models.Contrato
+@{
+    ViewData["Title"] = "Nuevo Contrato";
+    var inquilinos = ViewBag.Inquilinos as List<inmobiliaria.Models.Inquilino>;
+    var inmuebles = ViewBag.Inmuebles as List<inmobiliaria.Models.Inmueble>;
+    var tipos = ViewBag.TiposInmueble as List<inmobiliaria.Models.TipoInmueble>;
+}
+
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <!-- Panel de búsqueda de inquilinos -->
+        <div class="col-lg-4 col-md-6 mb-3">
+            <div class="card shadow h-40">
+                <div class="card-body">
+                    <h5 class="card-title text-center text-info mb-3">Buscar y Seleccionar Inquilino</h5>
+                    <input type="text" id="buscadorInquilino" class="form-control mb-3" placeholder="Buscar inquilino..." autocomplete="off" />
+                    <div id="panelInquilinos" class="border rounded p-2 bg-light" style="max-height:250px; overflow-y:auto;">
+                        @foreach (var inq in inquilinos)
+                        {
+                            <div class="form-check inquilino-item">
+                                <input class="form-check-input" type="radio" name="Id_Inquilino"
+                                    id="inq_@inq.Id_Inquilino" value="@inq.Id_Inquilino" form="formContrato" required />
+                                <label class="form-check-label" for="inq_@inq.Id_Inquilino">
+                                    @inq.Nombre @inq.Apellido (@inq.Email)
+                                </label>
+                            </div>
+                        }
+                    </div>
+                    <div class="text-center mt-3">
+                        <a asp-controller="Inquilino" asp-action="Crear" class="btn btn-success bg-success">
+                            + Nuevo Inquilino
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel de búsqueda de inmuebles -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow h-70">
+                <div class="card-body">
+                    <h5 class="card-title text-center text-info mb-3">Buscar y Seleccionar Inmueble</h5>
+                    <div class="mb-2">
+                        <select id="filtroTipo" class="form-select mb-2">
+                            <option value="">Tipo (todos)</option>
+                            @if (tipos != null)
+                            {
+                                foreach (var tipo in tipos)
+                                {
+                                    <option value="@tipo.Nombre">@tipo.Nombre</option>
+                                }
+                            }
+                        </select>
+                        <input type="number" id="filtroAmbientes" class="form-control mb-2" placeholder="Cantidad de ambientes (opcional)" min="1" />
+                        <input type="number" id="filtroPrecio" class="form-control mb-2" placeholder="Precio máximo (opcional)" min="0" step="0.01" />
+                    </div>
+                    <div id="panelInmuebles" class="border rounded p-2 bg-light" style="max-height:250px; overflow-y:auto;">
+                        @foreach (var inmueble in inmuebles)
+                        {
+                            <div class="form-check inmueble-item"
+                                 data-tipo="@inmueble.Id_Tipo"
+                                 data-ambientes="@inmueble.Cantidad_Ambientes"
+                                 data-precio="@inmueble.Precio"
+                                 data-direccion="@inmueble.Direccion?.ToLower()">
+                                <input class="form-check-input" type="radio" name="Id_Inmueble"
+                                       id="inm_@inmueble.Id_Inmueble" value="@inmueble.Id_Inmueble" form="formContrato" data-precio="@inmueble.Precio" required />
+                                <label class="form-check-label" for="inm_@inmueble.Id_Inmueble">
+                                    @inmueble.Direccion (@inmueble.Cantidad_Ambientes ambientes, $@inmueble.Precio, Tipo: @inmueble.Id_Tipo)
+                                </label>
+                            </div>
+                        }
+                    </div>
+                    <div class="text-center mt-3">
+                        <a asp-controller="Inmueble" asp-action="Crear" class="btn btn-success bg-success">
+                            + Nuevo Inmueble
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario principal -->
+        <div class="col-lg-4 col-md-12 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-body">
+                    <h2 class="mb-4 text-center text-info">Crear Nuevo Contrato</h2>
+                    <form asp-action="Crear" method="post" id="formContrato">
+                        <div class="mb-3">
+                            <label for="Id_Inmueble" class="form-label">Inmueble</label>
+                            <input asp-for="Id_Inmueble" class="form-control" type="number" min="1" readonly required id="IdInmuebleInput" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="Fecha_Inicio" class="form-label">Fecha de Inicio</label>
+                            <input asp-for="Fecha_Inicio" class="form-control" type="date" required  />
+                        </div>
+                        <div class="mb-3">
+                            <label for="Fecha_Fin_Original" class="form-label">Fecha de Fin</label>
+                            <input asp-for="Fecha_Fin_Original" class="form-control" type="date" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="Monto_Mensual" class="form-label">Monto Mensual</label>
+                            <input asp-for="Monto_Mensual" class="form-control" type="number" min="0" step="0.01" required id="MontoMensualInput" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="Multa" class="form-label">Multa</label>
+                            <input asp-for="Multa" class="form-control" type="number" readonly min="0" step="0.01" value="0" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="Estado" class="form-label">Estado</label>
+                            <input asp-for="Estado" class="form-control" value="vigente" readonly />
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success px-5">Crear Contrato</button>
+                            <a asp-action="Index" class="btn btn-secondary ms-2">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Filtrado de inquilinos
+        document.getElementById('buscadorInquilino').addEventListener('input', function () {
+        var texto = this.value.trim().toLowerCase();
+        var items = document.querySelectorAll('.inquilino-item');
+        items.forEach(function (item) {
+            var label = item.textContent.toLowerCase();
+            if (texto.length < 3 || label.includes(texto)) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+    // Filtrado de inmuebles
+    function filtrarInmuebles() {
+        var tipo = document.getElementById('filtroTipo').value;
+        var ambientes = document.getElementById('filtroAmbientes').value;
+        var precio = document.getElementById('filtroPrecio').value;
+        var items = document.querySelectorAll('.inmueble-item');
+        items.forEach(function (item) {
+            var coincide = true;
+            if (tipo && item.dataset.tipo !== tipo) coincide = false;
+            if (ambientes && parseInt(item.dataset.ambientes) !== parseInt(ambientes)) coincide = false;
+            if (precio && parseFloat(item.dataset.precio) > parseFloat(precio)) coincide = false;
+            item.style.display = coincide ? '' : 'none';
+        });
+    }
+
+    // Autocompletar campos al seleccionar un inmueble
+    document.querySelectorAll('input[name="Id_Inmueble"]').forEach(function (radio) {
+    radio.addEventListener('change', function () {
+        // ID del inmueble seleccionado
+        var id = this.value;
+        // Precio del inmueble seleccionado
+        var precio = this.getAttribute('data-precio');
+        document.getElementById('IdInmuebleInput').value = id;
+        document.getElementById('MontoMensualInput').value = precio.replace(',', '.');
+    });
+});
+    document.getElementById('filtroTipo').addEventListener('change', filtrarInmuebles);
+    document.getElementById('filtroAmbientes').addEventListener('input', filtrarInmuebles);
+    document.getElementById('filtroPrecio').addEventListener('input', filtrarInmuebles);
+</script>
