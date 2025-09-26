@@ -88,6 +88,24 @@ namespace inmobiliaria.DAO
             }
         }
 
+        public bool Actualizar(Contrato contrato)
+        {
+            using var conexion = Data.Conexion.ObtenerConexion(_connectionString);
+            var cmd = new MySqlCommand("UPDATE contratos SET id_inquilino = @id_inquilino, id_inmueble = @id_inmueble, fecha_fin_original = @fecha_fin_original, fecha_fin_anticipada = @fecha_fin_anticipada, monto_mensual = @monto_mensual, id_usuario_finalizador = @id_usuario_finalizador, estado = @estado, multa = @multa WHERE id_contrato = @id_contrato", conexion);
+            cmd.Parameters.AddWithValue("@id_inquilino", contrato.Id_Inquilino);
+            cmd.Parameters.AddWithValue("@id_inmueble", contrato.Id_Inmueble);
+            cmd.Parameters.AddWithValue("@fecha_fin_original", contrato.Fecha_Fin_Original);
+            cmd.Parameters.AddWithValue("@fecha_fin_anticipada", contrato.Fecha_Fin_Anticipada != DateTime.MinValue ? contrato.Fecha_Fin_Anticipada : (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@monto_mensual", contrato.Monto_Mensual);
+            cmd.Parameters.AddWithValue("@id_usuario_finalizador", contrato.Id_Usuario_Finalizador != null ? contrato.Id_Usuario_Finalizador : (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@estado", contrato.Estado != null ? contrato.Estado : (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@multa", contrato.Multa);
+            cmd.Parameters.AddWithValue("@id_contrato", contrato.Id_Contrato);
+
+            int filasAfectadas = cmd.ExecuteNonQuery();
+            return filasAfectadas > 0;
+        }
+
 
         //AUXILIAR
         private Contrato MapearContrato(IDataRecord record)

@@ -39,6 +39,26 @@ namespace inmobiliaria.DAO
             return lista;
         }
 
+        public bool Actualizar(Pago pago)
+        {
+            using var conexion = Conexion.ObtenerConexion(_connectionString);
+            var cmd = new MySqlCommand(@"UPDATE pagos SET id_contrato = @id_contrato, numero_pago = @numero_pago, fecha_vencimiento = @fecha_vencimiento, fecha_pago = @fecha_pago, detalle = @detalle, importe = @importe, estado = @estado, id_usuario_creador = @id_usuario_creador, id_usuario_anulador = @id_usuario_anulador WHERE id_pago = @id_pago", conexion);
+
+            cmd.Parameters.AddWithValue("@id_pago", pago.Id_Pago);
+            cmd.Parameters.AddWithValue("@id_contrato", pago.Id_Contrato);
+            cmd.Parameters.AddWithValue("@numero_pago", pago.Numero_Pago);
+            cmd.Parameters.AddWithValue("@fecha_vencimiento", pago.Fecha_Vencimiento);
+            cmd.Parameters.AddWithValue("@fecha_pago", (object?)pago.Fecha_Pago ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@detalle", (object?)pago.Detalle ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@importe", pago.Importe);
+            cmd.Parameters.AddWithValue("@estado", (object?)pago.Estado ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@id_usuario_creador", pago.Id_Usuario_Creador);
+            cmd.Parameters.AddWithValue("@id_usuario_anulador", (object?)pago.Id_Usuario_Anulador ?? DBNull.Value);
+
+            return cmd.ExecuteNonQuery() > 0;
+
+        }
+
 
         //AUXILIARES
         private Pago mapearPago(MySqlDataReader reader)
