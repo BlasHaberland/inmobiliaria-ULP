@@ -50,7 +50,7 @@ public class ContratoController : Controller
         ViewBag.Contrato = contrato;
         ViewBag.Pagos = pagos;
 
-        return View();
+        return View(contrato);
     }
 
 
@@ -84,6 +84,58 @@ public class ContratoController : Controller
         ViewBag.TiposInmueble = _tipoInmuebleDAO.ObtenerTodos();
         ViewBag.Inmuebles = _inmuebleDAO.ObtenerActivos();
         return View(contrato);
+    }
+
+    [HttpPost]
+    public IActionResult Finalizar(int id)
+    {
+        var contrato = _contratoDAO.ObtenerPorId(id);
+        if (contrato == null || contrato.Estado == "finalizado")
+        {
+            TempData["Error"] = "No se encontró el contrato o ya fue finalizado.";
+            return RedirectToAction("Index");
+        }
+
+        var idUsuarioCreador = User.Claims.FirstOrDefault(c => c.Type == "Id");
+        if (idUsuarioCreador == null)
+        {
+            TempData["Error"] = "No se pudo identificar al usuario.";
+            return RedirectToAction("Index");
+        }
+
+
+        contrato.Estado = "finalizado";
+        contrato.Id_Usuario_Finalizador = int.Parse(idUsuarioCreador.Value);
+        _contratoDAO.Actualizar(contrato);
+
+        var inmueble = _inmuebleDAO.ObtenerPorId(contrato.Id_Inmueble);
+        if (inmueble != null)
+        {
+            inmueble.Estado = "disponible";
+            _inmuebleDAO.Actualizar(inmueble);
+        }
+        TempData["Success"] = "Contrato finalizado y el inmueble está disponible.";
+        return RedirectToAction("Detalle", new { id = contrato.Id_Contrato });
+
+    }
+
+    [HttpPost]
+    public IActionResult Extender(Contrato nuevoContrato)
+    {
+        var idUsuario = User.Claims.FirstOrDefault(c => c.Type == "Id");
+        nuevoContrato.Id_Usuario_Creador = int.Parse(idUsuario.Value);
+        nuevoContrato.Estado = "vigente";
+
+        if (ModelState.IsValid)
+        {
+            _contratoDAO.Crear(nuevoContrato);
+            _inmuebleDAO.CambiarEstado(nuevoContrato.Id_Inmueble, "ocupado");
+            TempData["Success"] = "Nuevo contrato creado correctamente.";
+            return RedirectToAction("Index");
+        }
+
+        TempData["Error"] = "Verifique los datos ingresados.";
+        return RedirectToAction("Detalle", new { id = nuevoContrato.Id_Inquilino });
     }
 
 }

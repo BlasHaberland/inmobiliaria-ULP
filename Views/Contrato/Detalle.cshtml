@@ -36,6 +36,7 @@
                 </ul>
             </div>
         </div>
+
         <!-- Panel Lista de pagos -->
         <div class="col-md-7 mb-4">
             <div class="card h-100">
@@ -61,9 +62,25 @@
                                     <td>$@pago.Importe</td>
                                     <td>
                                         <span
-                                            class="badge @(pago.Estado == "pendiente" ? "bg-warning text-dark" : pago.Estado == "pagado" ? "bg-success" : "bg-secondary")">
+                                            class="badge @(pago.Estado == "pendiente" ? "bg-warning text-dark" : pago.Estado == "realizado" ? "bg-success" : "bg-secondary")">
                                             @pago.Estado
                                         </span>
+                                        @if (pago.Estado == "pendiente")
+                                        {
+                                            <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#pagarModal" data-id="@pago.Id_Pago"
+                                                data-numero="@pago.Numero_Pago" data-importe="@pago.Importe">
+                                                Pagar
+                                            </button>
+                                            <form asp-controller="Pago" asp-action="Anular" method="post"
+                                                style="display:inline;">
+                                                <input type="hidden" name="id" value="@pago.Id_Pago" />
+                                                <button type="submit" class="btn btn-danger btn-sm ms-1"
+                                                    onclick="return confirm('¿Seguro que desea anular este pago?');">
+                                                    Anular
+                                                </button>
+                                            </form>
+                                        }
                                     </td>
                                 </tr>
                             }
@@ -72,14 +89,166 @@
                 </div>
             </div>
         </div>
+
     </div>
+
     <!-- Botón Dar de Baja -->
     <div class="text-center mt-4">
         <form asp-action="DarDeBaja" asp-route-id="@contrato.Id_Contrato" method="post">
-            <button type="submit" class="btn btn-outline-danger btn-lg px-5">DAR DE BAJA</button>
+            @if (contrato.Estado == "finalizado" || contrato.Estado == "rescindido")
+            {
+                <button type="submit" class="btn btn-outline-danger btn-lg px-5 disabled" disabled>
+                    DAR DE BAJA
+                </button>
+            }
+            else
+            {
+                <button type="submit" class="btn btn-outline-danger btn-lg px-5">
+                    DAR DE BAJA
+                </button>
+            }
         </form>
     </div>
 </div>
+
+<!-- Modal de Pago -->
+<div class="modal fade" id="pagarModal" tabindex="-1" aria-labelledby="pagarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-white border-success">
+            <form id="formPagar" asp-controller="Pago" asp-action="Pagar" method="post" autocomplete="off">
+                <div class="modal-header border-0 pb-0">
+                    <h4 class="modal-title fw-bold text-success" id="pagarModalLabel">
+                        Registrar Pago
+                    </h4>
+
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body pt-2">
+                    <input type="hidden" name="id" id="modalIdPago" />
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <label class="form-label mb-1">N° de Pago</label>
+                            <input type="text" class="form-control bg-secondary text-white" id="modalNumeroPago"
+                                readonly />
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label mb-1">Monto</label>
+                            <input type="text" class="form-control bg-secondary text-white" id="modalImportePago"
+                                readonly />
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <label for="Detalle" class="form-label mb-1">Detalle</label>
+                        <textarea class="form-control" name="Detalle" id="modalDetallePago" maxlength="100" rows="2"
+                            required placeholder="Ej: Pago correspondiente a octubre"></textarea>
+                        <div class="form-text text-muted">Máx. 100 caracteres</div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="submit" class="btn btn-success px-4">
+                        Confirmar Pago
+                    </button>
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Opciones Fin de Contrato -->
+<div class="modal fade" id="modalFinContrato" tabindex="-1" aria-labelledby="modalFinContratoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="modalFinContratoLabel">Contrato finalizado</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p>Has realizado el último pago de este contrato.<br>¿Qué deseas hacer?</p>
+                <button type="button" class="btn btn-success m-2" data-bs-toggle="modal"
+                    data-bs-target="#modalExtenderContrato">
+                    Extender Contrato
+                </button>
+                <form asp-action="Finalizar" asp-controller="Contrato" asp-route-id="@Model.Id_Contrato" method="post"
+                    class="d-inline">
+                    <button type="submit" class="btn btn-danger m-2">Finalizar Contrato</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Extender Contrato -->
+<div class="modal fade" id="modalExtenderContrato" tabindex="-1" aria-labelledby="modalExtenderContratoLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-white">
+            <form asp-action="Extender" asp-controller="Contrato" method="post" autocomplete="off">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="modalExtenderContratoLabel">Extender Contrato</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="Id_Inquilino" value="@Model.Id_Inquilino" />
+                    <input type="hidden" name="Id_Inmueble" value="@Model.Id_Inmueble" />
+                    <div class="mb-3">
+                        <label class="form-label">Fecha de Inicio</label>
+                        <input type="date" name="Fecha_Inicio" class="form-control" required
+                            value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Fecha de Fin</label>
+                        <input type="date" name="Fecha_Fin_Original" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Monto Mensual</label>
+                        <input type="number" name="Monto_Mensual" class="form-control" min="0" step="0.01" required
+                            value="@Model.Monto_Mensual" />
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="submit" class="btn btn-success">Crear Nuevo Contrato</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var pagarModal = document.getElementById('pagarModal');
+        pagarModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var id = button.getAttribute('data-id');
+            var numero = button.getAttribute('data-numero');
+            var importe = button.getAttribute('data-importe');
+            document.getElementById('modalIdPago').value = id;
+            document.getElementById('modalNumeroPago').value = numero;
+            document.getElementById('modalImportePago').value = "$" + importe;
+            document.getElementById('modalDetallePago').value = "";
+            console.log("ID del pago:", id);
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            @if (TempData["UltimoPago"] != null)
+                {
+                    <text>
+                        var modal = new bootstrap.Modal(document.getElementById('modalFinContrato'));
+                        modal.show();
+                    </text>
+            }
+                            });
+    </script>
+}
+
 
 @section Styles {
     <link rel="stylesheet" href="~/css/ContratoDetalle.css" />
