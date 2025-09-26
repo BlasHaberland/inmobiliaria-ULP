@@ -52,5 +52,13 @@ namespace inmobiliaria.Models
         public string? Nombre_Inquilino { get; set; }
         public string? Apellido_Inquilino { get; set; }
 
+        //TO STRING COMPLETO
+        public override string ToString()
+        {
+            return $"Contrato [Id_Contrato={Id_Contrato}, Id_Inquilino={Id_Inquilino}, Id_Inmueble={Id_Inmueble}, Id_Usuario_Creador={Id_Usuario_Creador}, Id_Usuario_Finalizador={Id_Usuario_Finalizador}, Fecha_Inicio={Fecha_Inicio}, Fecha_Fin_Original={Fecha_Fin_Original}, Fecha_Fin_Anticipada={Fecha_Fin_Anticipada}, Monto_Mensual={Monto_Mensual}, Estado={Estado}, Multa={Multa}, Nombre_Inquilino={Nombre_Inquilino}, Apellido_Inquilino={Apellido_Inquilino}]";
+        }
+
     }
+
+
 }

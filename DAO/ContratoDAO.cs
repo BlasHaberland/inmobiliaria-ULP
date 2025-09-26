@@ -117,6 +117,7 @@ namespace inmobiliaria.DAO
                 Id_Inmueble = Convert.ToInt32(record["id_inmueble"]),
                 Id_Usuario_Creador = Convert.ToInt32(record["id_usuario_creador"]),
                 Id_Usuario_Finalizador = record["id_usuario_finalizador"] != DBNull.Value ? Convert.ToInt32(record["id_usuario_finalizador"]) : (int?)null,
+                Fecha_Inicio = Convert.ToDateTime(record["fecha_inicio"]),
                 Fecha_Fin_Original = Convert.ToDateTime(record["fecha_fin_original"]),
                 Fecha_Fin_Anticipada = record["fecha_fin_anticipada"] != DBNull.Value ? Convert.ToDateTime(record["fecha_fin_anticipada"]) : DateTime.MinValue,
                 Monto_Mensual = Convert.ToDecimal(record["monto_mensual"]),
