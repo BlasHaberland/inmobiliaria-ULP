@@ -95,26 +95,6 @@ public class ContratoController : Controller
             TempData["Error"] = "No se encontró el contrato o ya fue finalizado.";
             return RedirectToAction("Index");
         }
-
-        var idUsuarioCreador = User.Claims.FirstOrDefault(c => c.Type == "Id");
-        if (idUsuarioCreador == null)
-        {
-            TempData["Error"] = "No se pudo identificar al usuario.";
-            return RedirectToAction("Index");
-        }
-
-
-        contrato.Estado = "finalizado";
-        contrato.Id_Usuario_Finalizador = int.Parse(idUsuarioCreador.Value);
-        _contratoDAO.Actualizar(contrato);
-
-        var inmueble = _inmuebleDAO.ObtenerPorId(contrato.Id_Inmueble);
-        if (inmueble != null)
-        {
-            inmueble.Estado = "disponible";
-            _inmuebleDAO.Actualizar(inmueble);
-        }
-        TempData["Success"] = "Contrato finalizado y el inmueble está disponible.";
         return RedirectToAction("Detalle", new { id = contrato.Id_Contrato });
 
     }
@@ -136,6 +116,70 @@ public class ContratoController : Controller
 
         TempData["Error"] = "Verifique los datos ingresados.";
         return RedirectToAction("Detalle", new { id = nuevoContrato.Id_Inquilino });
+    }
+
+    [HttpPost]
+    public IActionResult Rescindir(int id)
+    {
+        var contrato = _contratoDAO.ObtenerPorId(id);
+        if (contrato == null || contrato.Estado == "finalizado" || contrato.Estado == "rescindido")
+        {
+            TempData["Error"] = "No se encontró el contrato o ya fue finalizado/rescindido.";
+            return RedirectToAction("Index");
+        }
+
+
+        //Callculo fechas
+        DateTime fechaHoy = DateTime.Now;
+        var fechaInicio = contrato.Fecha_Inicio;
+        var fechaFin = contrato.Fecha_Fin_Original;
+        var mesesTotales = ((fechaFin.Year - fechaInicio.Year) * 12) + fechaFin.Month - fechaInicio.Month;
+        var mesesTranscurridos = ((fechaHoy.Year - fechaInicio.Year) * 12) + fechaHoy.Month - fechaInicio.Month;
+
+
+
+        //Calculo multa
+        //pueden ser 1 o 2
+        //ej: mesesTranscurridos = 5 y mesesTotales = 12 ==> se le asignan 2 meses de multa
+        int mesesMulta = mesesTranscurridos < (mesesTotales / 2) ? 2 : 1;
+        decimal multa = mesesMulta * contrato.Monto_Mensual;
+
+        var idUsuario = User.Claims.FirstOrDefault(c => c.Type == "Id");
+
+        var pagosPendientes = _pagoDAO.ObtenerPorContrato(contrato.Id_Contrato);
+        foreach (var pago in pagosPendientes)
+        {
+            pago.Estado = "anulado";
+            pago.Fecha_Pago = fechaHoy;
+            pago.Id_Usuario_Anulador = int.Parse(idUsuario.Value);
+            pago.Detalle = "anulado por rescisión de contrato";
+            _pagoDAO.Actualizar(pago);
+        }
+
+        //Actualizo contrato
+        contrato.Estado = "rescindido";
+        contrato.Fecha_Fin_Anticipada = fechaHoy;
+        contrato.Multa = multa;
+        contrato.Id_Usuario_Finalizador = int.Parse(idUsuario.Value);
+        _contratoDAO.Actualizar(contrato);
+
+        //creo el pago de la multa
+        var pagos = _pagoDAO.ObtenerPorContrato(contrato.Id_Contrato);
+        Console.WriteLine("multa: " + multa);
+        var pagoMulta = new Pago
+        {
+            Id_Contrato = contrato.Id_Contrato,
+            Numero_Pago = pagosPendientes.Count + 1,
+            Fecha_Vencimiento = fechaHoy,
+            Fecha_Pago = fechaHoy,
+            Detalle = "Multa por rescisión anticipada",
+            Importe = multa,
+            Estado = "pendiente",
+            Id_Usuario_Creador = int.Parse(idUsuario.Value)
+        };
+
+        _pagoDAO.AgregarPago(pagoMulta);
+        return RedirectToAction("Detalle", new { id = contrato.Id_Contrato });
     }
 
 }

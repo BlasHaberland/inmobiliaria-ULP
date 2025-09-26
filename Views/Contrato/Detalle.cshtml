@@ -94,17 +94,17 @@
 
     <!-- Botón Dar de Baja -->
     <div class="text-center mt-4">
-        <form asp-action="DarDeBaja" asp-route-id="@contrato.Id_Contrato" method="post">
+        <form asp-action="Rescindir" asp-route-id="@contrato.Id_Contrato" method="post">
             @if (contrato.Estado == "finalizado" || contrato.Estado == "rescindido")
             {
                 <button type="submit" class="btn btn-outline-danger btn-lg px-5 disabled" disabled>
-                    DAR DE BAJA
+                    Rescindir cotrato
                 </button>
             }
             else
             {
                 <button type="submit" class="btn btn-outline-danger btn-lg px-5">
-                    DAR DE BAJA
+                    Rescindir cotrato
                 </button>
             }
         </form>
@@ -168,15 +168,11 @@
                     aria-label="Cerrar"></button>
             </div>
             <div class="modal-body text-center">
-                <p>Has realizado el último pago de este contrato.<br>¿Qué deseas hacer?</p>
+                <p>Has realizado el último pago de este contrato.<br>¿Desea Extenderlo?</p>
                 <button type="button" class="btn btn-success m-2" data-bs-toggle="modal"
                     data-bs-target="#modalExtenderContrato">
                     Extender Contrato
                 </button>
-                <form asp-action="Finalizar" asp-controller="Contrato" asp-route-id="@Model.Id_Contrato" method="post"
-                    class="d-inline">
-                    <button type="submit" class="btn btn-danger m-2">Finalizar Contrato</button>
-                </form>
             </div>
         </div>
     </div>
