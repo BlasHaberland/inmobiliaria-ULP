@@ -47,6 +47,36 @@ namespace inmobiliaria.DAO
             }
             return lista;
         }
+
+
+        //TODO: Unificar ObtenerPorEstado con todos los Obterner
+        public List<Inmueble> ObtenerPorEstado(string estado)
+        {
+            var lista = new List<Inmueble>();
+            using var conexion = Data.Conexion.ObtenerConexion(_connectionString);
+            var query = "SELECT * FROM inmuebles";
+
+            if (!string.IsNullOrEmpty(estado))
+            {
+                query += " WHERE estado = @estado";
+            }
+
+            var cmd = new MySqlCommand(query, conexion);
+
+            if (!string.IsNullOrEmpty(estado))
+            {
+                cmd.Parameters.AddWithValue("@estado", estado);
+            }
+
+            using var reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                lista.Add(MapearInmueble(reader));
+            }
+            return lista;
+        }
+
         public Inmueble? ObtenerPorId(int id)
         {
             using var conexion = Data.Conexion.ObtenerConexion(_connectionString);

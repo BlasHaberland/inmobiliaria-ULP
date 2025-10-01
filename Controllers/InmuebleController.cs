@@ -20,9 +20,9 @@ namespace inmobiliaria.Controllers
             _tipoInmuebleDao = new TipoInmuebleDAO(connectionString);
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string estado)
         {
-            var inmuebles = _inmuebleDao.ObtenerTodos();
+            var inmuebles = _inmuebleDao.ObtenerPorEstado(estado);
             return View(inmuebles);
         }
 
@@ -62,9 +62,6 @@ namespace inmobiliaria.Controllers
             ViewBag.Propietarios = propietarios;
             return View(inmueble);
         }
-
-
-
 
         public IActionResult Editar(int id)
         {
