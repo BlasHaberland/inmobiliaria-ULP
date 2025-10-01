@@ -34,20 +34,24 @@
                     <a class="btn btn-sm btn-primary" asp-action="Editar" asp-route-id="@inquilino.Id_Inquilino">
                         Actualizar
                     </a>
-                    @if (inquilino.Activo)
+                    @if (User.IsInRole("administrador"))
                     {
-                        <a class="btn btn-sm btn-danger" asp-action="Eliminar" asp-route-id="@inquilino.Id_Inquilino"
-                            onclick="return confirm('¿Seguro que desea dar de baja este inquilino?');">
-                            Dar de baja
-                        </a>
+                        @if (inquilino.Activo)
+                        {
+                            <a class="btn btn-sm btn-danger" asp-action="Eliminar" asp-route-id="@inquilino.Id_Inquilino"
+                                onclick="return confirm('¿Seguro que desea dar de baja este inquilino?');">
+                                Dar de baja
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-sm btn-success" asp-action="Alta" asp-route-id="@inquilino.Id_Inquilino"
+                                onclick="return confirm('¿Seguro que desea dar de alta este inquilino?');">
+                                Dar de alta
+                            </a>
+                        }
                     }
-                    else
-                    {
-                        <a class="btn btn-sm btn-success" asp-action="Alta" asp-route-id="@inquilino.Id_Inquilino"
-                            onclick="return confirm('¿Seguro que desea dar de alta este inquilino?');">
-                            Dar de alta
-                        </a>
-                    }
+
                 </td>
             </tr>
         }

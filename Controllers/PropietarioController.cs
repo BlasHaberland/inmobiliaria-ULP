@@ -22,6 +22,7 @@ namespace inmobiliaria.Controllers
         }
 
         //TODO: crear un metodo Destruir() para eliminar un proipietario de la faz de la base de datos
+        [Authorize("administrador")]
         public IActionResult Eliminar(int id)
 
         {
@@ -36,7 +37,7 @@ namespace inmobiliaria.Controllers
             }
             return RedirectToAction("Index");
         }
-
+        [Authorize("administrador")]
         public IActionResult Alta(int id)
         {
             bool exito = _propietarioDao.altaPropietario(id);
