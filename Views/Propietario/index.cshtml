@@ -37,20 +37,24 @@
                     <a class="btn btn-sm btn-primary" asp-action="Editar" asp-route-id="@propietario.Id_Propietario">
                         Actualizar
                     </a>
-                    @if (propietario.Activo)
+                    @if (User.IsInRole("administrador"))
                     {
-                        <a class="btn btn-sm btn-danger" asp-action="Eliminar" asp-route-id="@propietario.Id_Propietario"
-                            onclick="return confirm('¿Seguro que desea dar de baja este propietario?');">
-                            Dar de baja
-                        </a>
+                        @if (propietario.Activo)
+                        {
+                            <a class="btn btn-sm btn-danger" asp-action="Eliminar" asp-route-id="@propietario.Id_Propietario"
+                                onclick="return confirm('¿Seguro que desea dar de baja este propietario?');">
+                                Dar de baja
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-sm btn-success" asp-action="Alta" asp-route-id="@propietario.Id_Propietario"
+                                onclick="return confirm('¿Seguro que desea dar de alta este propietario?');">
+                                Dar de alta
+                            </a>
+                        }
                     }
-                    else
-                    {
-                        <a class="btn btn-sm btn-success" asp-action="Alta" asp-route-id="@propietario.Id_Propietario"
-                            onclick="return confirm('¿Seguro que desea dar de alta este propietario?');">
-                            Dar de alta
-                        </a>
-                    }
+
                     <a asp-controller="Inmueble" asp-action="InmueblePropietario" asp-route-id="@propietario.Id_Propietario"
                         class="btn btn-info btn-sm">
                         Ver Inmuebles

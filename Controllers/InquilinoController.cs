@@ -21,6 +21,7 @@ namespace inmobiliaria.Controllers
             return View(lista);
         }
 
+        [Authorize("administrador")]
         public IActionResult Eliminar(int id)
         {
             bool exito = _inquilinoDao.eliminarInquilino(id);
@@ -34,7 +35,7 @@ namespace inmobiliaria.Controllers
             }
             return RedirectToAction("Index");
         }
-
+        [Authorize("administrador")]
         public IActionResult Alta(int id)
         {
             bool exito = _inquilinoDao.altaInquilino(id);

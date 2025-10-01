@@ -96,6 +96,8 @@ namespace inmobiliaria.Controllers
             return View(inmueble);
         }
 
+
+        [Authorize("administrador")]
         public IActionResult Eliminar(int id)
         {
             bool exito = _inmuebleDao.Eliminar(id);
@@ -110,6 +112,7 @@ namespace inmobiliaria.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize("administrador")]
         public IActionResult Alta(int id)
         {
             bool exito = _inmuebleDao.Alta(id);
