@@ -1,0 +1,153 @@
+@model inmobiliaria.Models.Usuario
+
+@{
+    ViewData["Title"] = "Actualizar Usuario";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Actualizar Usuario</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Actualizar" method="post" enctype="multipart/form-data" autocomplete="off">
+                        <input type="hidden" asp-for="Id_Usuario" />
+                        <input type="hidden" asp-for="Contrasena" id="campoContrasena" />
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
+                                data-bs-target="#modalContrasena">
+                                Cambiar contraseña
+                            </button>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Nombre" class="form-label"></label>
+                                <input asp-for="Nombre" class="form-control" />
+                                <span asp-validation-for="Nombre" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Apellido" class="form-label"></label>
+                                <input asp-for="Apellido" class="form-control" />
+                                <span asp-validation-for="Apellido" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            @if (Model.Rol == "administrador")
+                            {
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Rol" class="form-label"></label>
+                                    <select asp-for="Rol" class="form-select">
+                                        <option value="administrador">Administrador</option>
+                                        <option value="empleado">Empleado</option>
+                                    </select>
+                                    <span asp-validation-for="Rol" class="text-danger small"></span>
+                                </div>
+                            }
+                            else
+                            {
+                                <input type="hidden" asp-for="Rol" />
+                            }
+                            <div class="col-md-6 mb-3 d-flex align-items-center">
+                                <label asp-for="Activo" class="form-label me-2"></label>
+                                <input asp-for="Activo" class="form-check-input" type="checkbox" />
+                            </div>
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Avatar</label>
+                            @if (!string.IsNullOrEmpty(Model.Avatar))
+                            {
+                                <div class="mb-2">
+                                    <img src="~/avatars/@Model.Avatar" alt="Avatar" width="64" height="64"
+                                        class="rounded-circle" />
+                                </div>
+                            }
+                            <input type="file" name="AvatarFile" class="form-control" />
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+                            <button type="submit" class="btn btn-success">Guardar cambios</button>
+                            @if (User.IsInRole("administrador"))
+                            {
+                                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                            }
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal para cambiar la contraseña -->
+<div class="modal fade" id="modalContrasena" tabindex="-1" aria-labelledby="modalContrasenaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalContrasenaLabel">Actualizar Contraseña</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="nuevaContrasena" class="form-label">Nueva contraseña</label>
+                    <input type="password" class="form-control" id="nuevaContrasena" name="NuevaContrasena"
+                        autocomplete="new-password" />
+                </div>
+                <div class="mb-3">
+                    <label for="confirmarContrasena" class="form-label">Confirmar contraseña</label>
+                    <input type="password" class="form-control" id="confirmarContrasena" name="ConfirmarContrasena"
+                        autocomplete="new-password" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" onclick="aplicarNuevaContrasena()">Aplicar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+
+    <!-- Modal Contrasena-->
+    <script>
+        function aplicarNuevaContrasena() {
+            var nueva = document.getElementById('nuevaContrasena').value;
+            var confirmar = document.getElementById('confirmarContrasena').value;
+            if (nueva !== confirmar) {
+                alert('Las contraseñas no coinciden.');
+                return;
+            }
+            if (nueva.length < 4) {
+                alert('La contraseña debe tener al menos 4 caracteres.');
+                return;
+            }
+            document.getElementById('campoContrasena').value = nueva;
+            var modal = bootstrap.Modal.getInstance(document.getElementById('modalContrasena'));
+            modal.hide();
+        }
+    </script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/UsuarioActualizar.css" />
+}

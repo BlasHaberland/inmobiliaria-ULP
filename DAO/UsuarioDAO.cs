@@ -65,7 +65,51 @@ namespace inmobiliaria.DAO
             return lista;
         }
 
+        public Usuario? ObtenerPorId(int id)
+        {
+            using var conexion = Conexion.ObtenerConexion(_connectionString);
+            var cmd = new MySqlCommand("SELECT * FROM usuarios WHERE id_usuario = @Id", conexion);
+            cmd.Parameters.AddWithValue("@Id", id);
+            using var reader = cmd.ExecuteReader();
+            if (reader.Read())
+            {
+                return MapearUsuario(reader);
+            }
+            return null;
+        }
+        public bool Actualizar(Usuario usuario)
+        {
+            usuario.Nombre = Capitalizar(usuario.Nombre);
+            usuario.Apellido = Capitalizar(usuario.Apellido);
 
+            var usuarioActual = ObtenerPorId(usuario.Id_Usuario);
+            if (usuarioActual != null && usuario.Contrasena != usuarioActual.Contrasena)
+            {
+                var hasher = new PasswordHasher<Usuario>();
+                usuario.Contrasena = hasher.HashPassword(usuario, usuario.Contrasena);
+            }
+
+            using var conexion = Conexion.ObtenerConexion(_connectionString);
+            var cmd = new MySqlCommand(@"UPDATE usuarios SET 
+                    email = @Email, 
+                    contrasena = @Contrasena,
+                    nombre = @Nombre, 
+                    apellido = @Apellido, 
+                    rol = @Rol, 
+                    avatar = @Avatar, 
+                    activo = @Activo 
+                    WHERE id_usuario = @Id_Usuario", conexion);
+            cmd.Parameters.AddWithValue("@Email", usuario.Email);
+            cmd.Parameters.AddWithValue("@Contrasena", usuario.Contrasena);
+            cmd.Parameters.AddWithValue("@Nombre", usuario.Nombre);
+            cmd.Parameters.AddWithValue("@Apellido", usuario.Apellido);
+            cmd.Parameters.AddWithValue("@Rol", usuario.Rol);
+            cmd.Parameters.AddWithValue("@Avatar", usuario.Avatar ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@Activo", usuario.Activo);
+            cmd.Parameters.AddWithValue("@Id_Usuario", usuario.Id_Usuario);
+
+            return cmd.ExecuteNonQuery() > 0;
+        }
 
         // Auxiliares
         private static string Capitalizar(string? texto)

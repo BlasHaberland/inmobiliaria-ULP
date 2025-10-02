@@ -15,6 +15,7 @@
             <th>Apellido</th>
             <th>Rol</th>
             <th>Activo</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -37,6 +38,10 @@
                 <td>@usuario.Apellido</td>
                 <td>@usuario.Rol</td>
                 <td>@(usuario.Activo ? "Sí" : "No")</td>
+                <td>
+                    <a asp-action="Actualizar" asp-route-id="@usuario.Id_Usuario"
+                        class="btn btn-primary btn-sm">Actualizar</a>
+                </td>
             </tr>
         }
     </tbody>

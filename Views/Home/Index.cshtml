@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Inicio";
+    var idUsuarioLogueado = User.FindFirst("Id")?.Value;
 }
 
 <div class="container py-5">
@@ -68,6 +69,25 @@
                             </div>
                         </div>
                     </div>
+                }
+                @if (User.IsInRole("empleado"))
+                {
+                    {
+                        <div class="col-md-4 mb-3">
+                            <div class="card shadow-sm h-100 card-usuarios text-white border-0">
+                                <div class="card-body">
+                                    <i class="bi bi-clipboard-fill fs-1 mb-2z"></i>
+                                    <h5 class="card-title mt-2">Mi Perfil</h5>
+                                    <p class="card-text">Consulta y gestiona la informacion de tu perfil.
+                                    </p>
+                                    <a asp-controller="Usuario" asp-action="Actualizar" asp-route-id="@idUsuarioLogueado"
+                                        class="btn btn-card btn-light fw-bold" style="color:#f860d7">
+                                        Ver mi perfil
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 }
             </div>
 
