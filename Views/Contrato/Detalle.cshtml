@@ -65,6 +65,20 @@
                                             class="badge @(pago.Estado == "pendiente" ? "bg-warning text-dark" : pago.Estado == "realizado" ? "bg-success" : "bg-secondary")">
                                             @pago.Estado
                                         </span>
+                                        @if (@pago.Estado == "anulado" || @pago.Estado == "realizado")
+                                        {
+
+                                            <button type="button" class="btn btn-info btn-sm ms-1" data-bs-toggle="modal"
+                                                data-bs-target="#detallePagoModal" data-id_pago="@pago.Id_Pago"
+                                                data-id_contrato="@pago.Id_Contrato" data-numero="@pago.Numero_Pago"
+                                                data-fecha_vencimiento="@pago.Fecha_Vencimiento.ToString("dd/MM/yyyy")"
+                                                data-fecha_pago="@(pago.Fecha_Pago?.ToString("dd/MM/yyyy") ?? "Sin pagar")"
+                                                data-detalle="@pago.Detalle" data-importe="@pago.Importe"
+                                                data-estado="@pago.Estado" data-id_usuario_creador="@pago.Id_Usuario_Creador"
+                                                data-id_usuario_anulador="@(pago.Id_Usuario_Anulador?.ToString() ?? "N/A")">
+                                                Ver Detalle
+                                            </button>
+                                        }
                                         @if (pago.Estado == "pendiente")
                                         {
                                             <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
@@ -218,6 +232,46 @@
     </div>
 </div>
 
+<!-- Modal Detalle de Pago -->
+<div class="modal fade" id="detallePagoModal" tabindex="-1" aria-labelledby="detallePagoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="detallePagoModalLabel">Detalle del Pago</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-dark text-white"><strong>ID Pago:</strong> <span
+                            id="detalleIdPago"></span></li>
+                    <li class="list-group-item bg-dark text-white"><strong>ID Contrato:</strong> <span
+                            id="detalleIdContrato"></span></li>
+                    <li class="list-group-item bg-dark text-white"><strong>N° de Pago:</strong> <span
+                            id="detalleNumeroPago"></span></li>
+                    <li class="list-group-item bg-dark text-white"><strong>Fecha de Vencimiento:</strong> <span
+                            id="detalleFechaVencimiento"></span></li>
+                    <li class="list-group-item bg-dark text-white"><strong>Fecha de Pago:</strong> <span
+                            id="detalleFechaPago"></span></li>
+                    <li class="list-group-item bg-dark text-white"><strong>Importe:</strong> $<span
+                            id="detalleImportePago"></span></li>
+                    <li class="list-group-item bg-dark text-white"><strong>Estado:</strong> <span
+                            id="detalleEstadoPago"></span></li>
+                    <li class="list-group-item bg-dark text-white"><strong>Detalle:</strong> <span
+                            id="detalleTextoPago"></span></li>
+                    <li class="list-group-item bg-dark text-white"><strong>ID Usuario Creador:</strong> <span
+                            id="detalleUsuarioCreador"></span></li>
+                    <li class="list-group-item bg-dark text-white"><strong>ID Usuario Anulador:</strong> <span
+                            id="detalleUsuarioAnulador"></span></li>
+                </ul>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <script>
         var pagarModal = document.getElementById('pagarModal');
@@ -243,7 +297,24 @@
                         modal.show();
                     </text>
             }
-                                                });
+                                                                                });
+    </script>
+
+    <script>
+        var detallePagoModal = document.getElementById('detallePagoModal');
+        detallePagoModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            document.getElementById('detalleIdPago').textContent = button.getAttribute('data-id_pago');
+            document.getElementById('detalleIdContrato').textContent = button.getAttribute('data-id_contrato');
+            document.getElementById('detalleNumeroPago').textContent = button.getAttribute('data-numero');
+            document.getElementById('detalleFechaVencimiento').textContent = button.getAttribute('data-fecha_vencimiento');
+            document.getElementById('detalleFechaPago').textContent = button.getAttribute('data-fecha_pago');
+            document.getElementById('detalleImportePago').textContent = button.getAttribute('data-importe');
+            document.getElementById('detalleEstadoPago').textContent = button.getAttribute('data-estado');
+            document.getElementById('detalleTextoPago').textContent = button.getAttribute('data-detalle') || "Sin detalle";
+            document.getElementById('detalleUsuarioCreador').textContent = button.getAttribute('data-id_usuario_creador');
+            document.getElementById('detalleUsuarioAnulador').textContent = button.getAttribute('data-id_usuario_anulador');
+        });
     </script>
 }
 
