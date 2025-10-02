@@ -15,13 +15,17 @@ namespace inmobiliaria.Controllers
             string connectionString = config.GetConnectionString("DefaultConnection");
             _propietarioDao = new PropietarioDAO(connectionString);
         }
-        public IActionResult Index()
+        public IActionResult Index(int pagina = 1, int tamanoPagina = 3)
         {
-            var lista = _propietarioDao.obtenerTodos();
-            return View(lista);
+            var totalPropietarios = _propietarioDao.contarPropietarios();
+            var totalPaginas = (int)Math.Ceiling((double)totalPropietarios / tamanoPagina);
+            ViewBag.PaginaActual = pagina;
+            ViewBag.TotalPaginas = totalPaginas;
+            var propietarios = _propietarioDao.obtenerPaginados(pagina, tamanoPagina);
+            return View(propietarios);
         }
 
-        //TODO: crear un metodo Destruir() para eliminar un proipietario de la faz de la base de datos
+
         [Authorize("administrador")]
         public IActionResult Eliminar(int id)
 
@@ -37,6 +41,7 @@ namespace inmobiliaria.Controllers
             }
             return RedirectToAction("Index");
         }
+
         [Authorize("administrador")]
         public IActionResult Alta(int id)
         {

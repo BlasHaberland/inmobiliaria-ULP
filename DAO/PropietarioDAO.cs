@@ -23,6 +23,32 @@ namespace inmobiliaria.DAO
             return lista;
         }
 
+        public int contarPropietarios()
+        {
+            int total = 0;
+            using var conexion = Conexion.ObtenerConexion(_connectionString);
+            var cmd = new MySqlCommand("SELECT COUNT(*) FROM propietarios", conexion);
+            total = Convert.ToInt32(cmd.ExecuteScalar());
+            Console.WriteLine("Total de propietarios: " + total);
+            return total;
+        }
+
+        public List<Propietario> obtenerPaginados(int pagina, int tamanoPagina)
+        {
+            var propietarios = new List<Propietario>();
+            using var conexion = Conexion.ObtenerConexion(_connectionString);
+            var cmd = new MySqlCommand("SELECT * FROM propietarios LIMIT @limite OFFSET @offset", conexion);
+            cmd.Parameters.AddWithValue("@limite", tamanoPagina);
+            cmd.Parameters.AddWithValue("@offset", (pagina - 1) * tamanoPagina);
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                propietarios.Add(MapearPropietario(reader));
+            }
+            return propietarios;
+        }
+
+
         public List<Propietario> obtenerActivos()
         {
             var lista = new List<Propietario>();
