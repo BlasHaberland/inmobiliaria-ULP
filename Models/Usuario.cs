@@ -30,7 +30,7 @@ namespace inmobiliaria.Models
         public string Apellido { get; set; } = string.Empty;
 
         [Column("rol")]
-        [Required]
+        [Required(ErrorMessage = "El Rol es obligatorio")]
         public string Rol { get; set; } = string.Empty;
 
         [Column("avatar")]
