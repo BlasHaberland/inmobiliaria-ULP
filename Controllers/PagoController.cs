@@ -89,6 +89,9 @@ namespace inmobiliaria.Controllers
             _pagoDao.Actualizar(pago);
             return RedirectToAction("Detalle", "Contrato", new { id = pago.Id_Contrato });
         }
+
+
+
     }
 }
 

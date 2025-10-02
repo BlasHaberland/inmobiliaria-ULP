@@ -5,7 +5,11 @@
     var estadoFiltro = Context.Request.Query["estado"].ToString();
 }
 
-<h2 class="my-4">Lista de Inmuebles</h2>
+<h2>Lista de Inmuebles</h2>
+
+<a asp-action="Crear" class="btn btn-success mb-3 mt-2">
+    <i class="bi bi-plus-circle"></i> Crear Inmueble
+</a>
 
 <form method="get" asp-action="Index" class="mb-3 d-flex align-items-center">
     <label for="estado" class="me-2">Filtrar por estado:</label>
