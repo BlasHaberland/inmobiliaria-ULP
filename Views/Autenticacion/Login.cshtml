@@ -27,6 +27,8 @@
                 <div class="alert alert-danger mt-3">@TempData["Error"]</div>
             }
         </form>
+
+        <!-- Tabla de credenciales -->
         @if (ViewBag.Usuarios != null)
         {
             <table class="table table-dark mt-4">
@@ -56,6 +58,7 @@
             </div>
         }
     </div>
+
 </div>
 
 @section Scripts {

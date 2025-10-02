@@ -27,6 +27,7 @@ namespace inmobiliaria.Controllers
         public async Task<IActionResult> Login(Usuario usuario)
         {
             var usuarioDb = _usuarioDAO.Login(usuario.Email, usuario.Contrasena);
+
             if (usuarioDb != null)
             {
                 var claims = new List<Claim>
