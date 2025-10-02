@@ -4,47 +4,65 @@
     ViewData["Title"] = "Editar Inquilino";
 }
 
-<h2>Editar Inquilino</h2>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Editar Inquilino</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Editar" method="post" autocomplete="off">
+                        <input type="hidden" asp-for="Id_Inquilino" />
 
-<form asp-action="Editar" method="post" class="mt-4">
-    <input type="hidden" asp-for="Id_Inquilino" />
+                        <div class="mb-3">
+                            <label asp-for="Dni" class="form-label"></label>
+                            <input asp-for="Dni" class="form-control" />
+                            <span asp-validation-for="Dni" class="text-danger small"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Nombre" class="form-label"></label>
+                            <input asp-for="Nombre" class="form-control" />
+                            <span asp-validation-for="Nombre" class="text-danger small"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Apellido" class="form-label"></label>
+                            <input asp-for="Apellido" class="form-control" />
+                            <span asp-validation-for="Apellido" class="text-danger small"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Telefono" class="form-label"></label>
+                            <input asp-for="Telefono" class="form-control" />
+                            <span asp-validation-for="Telefono" class="text-danger small"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Direccion" class="form-label"></label>
+                            <input asp-for="Direccion" class="form-control" />
+                            <span asp-validation-for="Direccion" class="text-danger small"></span>
+                        </div>
 
-    <div class="mb-3">
-        <label asp-for="Dni" class="form-label"></label>
-        <input asp-for="Dni" class="form-control" />
-        <span asp-validation-for="Dni" class="text-danger"></span>
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+                            <button type="submit" class="btn btn-success">Guardar cambios</button>
+                            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="mb-3">
-        <label asp-for="Nombre" class="form-label"></label>
-        <input asp-for="Nombre" class="form-control" />
-        <span asp-validation-for="Nombre" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="Apellido" class="form-label"></label>
-        <input asp-for="Apellido" class="form-control" />
-        <span asp-validation-for="Apellido" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="Telefono" class="form-label"></label>
-        <input asp-for="Telefono" class="form-control" />
-        <span asp-validation-for="Telefono" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="Email" class="form-label"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="Direccion" class="form-label"></label>
-        <input asp-for="Direccion" class="form-control" />
-        <span asp-validation-for="Direccion" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Guardar cambios</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-</form>
+</div>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/InquilinoEditar.css" />
 }
